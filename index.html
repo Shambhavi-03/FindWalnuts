@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Walnuts</title>
+    <style>
+        :root {
+          --mouse-x: 50%;
+          --mouse-y: 50%;
+        }
+
+        body {
+          margin: 0;
+          height: 100vh;
+          background-image: url(https://media.istockphoto.com/id/1269754579/photo/fruit-salad-and-its-ingredients-set-on-a-wooden-board-with-a-bottle-of-water.jpg?s=1024x1024&w=is&k=20&c=KkPnrtRTcyFj0r3foLbc_rwWC4vC_4A40850N7SBzB0=);
+          background-position: center center;
+          background-size: cover;
+        }
+
+        .mask {
+          width: 100vw;
+          height: 100vh;
+          background-color: hsla(0,0%,0%, 0.96);
+          mask: radial-gradient(
+            circle at var(--mouse-x) var(--mouse-y),
+            transparent 40px,
+            black 150px
+          );
+          -webkit-mask: radial-gradient(
+            circle at var(--mouse-x) var(--mouse-y),
+            transparent 40px,
+            black 150px
+          );
+          position: relative;
+          z-index: 1; /* Ensure the mask is on the bottom */
+        }
+
+        .clickable-area {
+            position: absolute;
+            background: transparent;
+            z-index: 2; /* Ensure clickable areas are on top of the mask */
+        }
+
+        /* ... (your existing clickable area styles) */
+
+        #message-container {
+            display: none;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3; /* Ensure the message box is on top of everything */
+        }
+
+        #success-message {
+            color: green;
+        }
+
+        #failure-message {
+            color: red;
+        }
+        .clickable-area.rect1 {
+            position: absolute;
+            top: 230px;
+            left: 610px;
+            width: 90px; /* Calculated as the difference between the x-coordinates (537 - 450) */
+            height: 310px; /* Calculated as the difference between the y-coordinates (521 - 251) */
+            cursor: pointer;
+        }
+        .clickable-area.rect2 {
+            position: absolute;
+            top: 170px;
+            left: 1184px;
+            width: 115px; /* Calculated as the difference between the x-coordinates (992 - 884) */
+            height: 390px; /* Calculated as the difference between the y-coordinates (502 - 167) */
+            cursor: pointer;
+        }
+
+        .clickable-area.circle1 {
+            position: absolute;
+            top: 205px;
+            left: 370px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .clickable-area.circle2 {
+            position: absolute;
+            top: 110px;
+            left: 765px;
+            width: 270px;
+            height: 270px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .clickable-area.circle3 {
+            position: absolute;
+            top: 445px;
+            left: 127px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .clickable-area.circle4 {
+            position: absolute;
+            top: 103px;
+            left: 146px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .clickable-area.circle5 {
+            position: absolute;
+            top: 395px;
+            left: 326px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .clickable-area.circle6 {
+            position: absolute;
+            top: 50px;
+            left: 420px;
+            width: 90px;
+            height: 110px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .clickable-area.circle7 {
+            position: absolute;
+            top: 255px;
+            left: 123px;
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+          </style>
+    </head>
+    <body>
+        <div class="mask"></div>
+        <a href="#" class="clickable-area rect1"></a>
+        <a href="#" class="clickable-area rect2"></a>
+        <a href="#" class="clickable-area circle1"></a>
+        <a href="#" class="clickable-area circle2"></a>
+        <a href="#" class="clickable-area circle3"></a>
+        <a href="#" class="clickable-area circle4"></a>
+        <a href="#" class="clickable-area circle5"></a>
+        <a href="#" class="clickable-area circle6"></a>
+        <a href="#" class="clickable-area circle7"></a>
+
+        <div id="message-container">
+            <p id="success-message">Success! You found Walnut!</p>
+            <p id="failure-message">Failure! Wrong Answer!</p>
+            <button id="closeButton">Close</button>
+        </div>
+    
+
+        <script>
+            // Get a reference to the .mask element.
+            const mask = document.querySelector('.mask');
+
+            // Add an event to catch mouse movements.
+            document.addEventListener('pointermove', (pos) => {
+            
+                // Calculate mouse position in percentages.
+                let x = parseInt( pos.clientX / window.innerWidth * 100 );
+                let y = parseInt( pos.clientY / window.innerHeight * 100 );
+            
+                // Update the custom property values on the body.
+                mask.style.setProperty('--mouse-x', x + '%');
+                mask.style.setProperty('--mouse-y', y + '%'); 
+            
+            });
+
+            document.querySelectorAll('.clickable-area').forEach(function(link) {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                if (link.classList.contains('circle6')) {
+                    showMessageBox('success-message');
+                } else {
+                    showMessageBox('failure-message');
+                }
+            });
+        });
+
+            document.getElementById('closeButton').addEventListener('click', function() {
+                hideMessageBox();
+            });
+
+            function showMessageBox(messageType) {
+                document.getElementById(messageType).style.display = 'block';
+                document.getElementById('message-container').style.display = 'block';
+            }
+
+            function hideMessageBox() {
+                document.getElementById('success-message').style.display = 'none';
+                document.getElementById('failure-message').style.display = 'none';
+                document.getElementById('message-container').style.display = 'none';
+            }
+        </script>
+    </body>
+</html>
